@@ -10,11 +10,15 @@ const typeDefs = `#graphql
   type Query {
     findUsers:[User]
     findUserById(id:ID!):User
-}
-
+    findUserByEmail(email:String!):User
+  }
 
   type Mutation {
     register(registerUser:Register):User
+    #  jadi ni kalo Register! itu artinya bahkan si name
+    #  juga harus diisin dengan value ga peduli 
+    #  apakah di input Register nya si name ga terlalu diperlukan
+    login(email:String!,password:String!):AuthPayLoad
   }
 
   input Register{
@@ -22,11 +26,13 @@ const typeDefs = `#graphql
     email:String!
     password:String!
     name:String
-}
+  }
+
+  type AuthPayLoad{
+    token:String!
+    email:String!
+  }
 
 `;
-
-
-
 
 module.exports = typeDefs;

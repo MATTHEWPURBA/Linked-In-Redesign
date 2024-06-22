@@ -7,7 +7,22 @@ class Post {
   }
   static async addPost(newPost) {
     try {
-      const response = await this.collection().insertOne(newPost);
+      const response = await this.collection().insertOne({
+        ...newPost,
+        // perbedaan newPost yang di 
+        // return dengan .insertOne(newPost)
+        // dengan .insertOne({...newPost})
+        // adalah kalo newPost yang invoke
+        // udah bareng dengan _id baru
+        // nah sedangkan kalo yang {...newPost}
+        // harus di inject sendiri _id nya pake
+        // insertedId biar pas di return
+        // ada _id nya, ini terjadi karena
+        // dari newPost nya sendiri pun gapunya _id
+        authorId: new ObjectId(newPost.authorId),
+        comments: [],
+        likes: [],
+      });
       return response;
     } catch (error) {
       console.log(error);

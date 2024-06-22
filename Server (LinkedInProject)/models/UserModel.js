@@ -27,7 +27,13 @@ class Users {
     } catch (error) {
       console.log(error)
       throw new Error("Error Fetching user by id")
-
+    }
+  }
+  static async findUserByEmail(email){
+    try {
+      return this.collection().findOne({email})
+    } catch (error) {
+      throw new Error("User Email cant")
     }
   }
 }

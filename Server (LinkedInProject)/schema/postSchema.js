@@ -9,6 +9,14 @@ const typeDefs = `#graphql
     likes: [Likes]
     createdAt:String
     updatedAt:String
+    author:AuthorDetail
+  }
+
+  type AuthorDetail{
+    _id: ID
+    name:String
+    username:String
+    email:String
   }
 
   type Comments{
@@ -24,13 +32,6 @@ const typeDefs = `#graphql
     updatedAt:String
   }
 
-  type Follow{
-    _id: ID
-    followingId:ID
-    followerId:ID
-    createdAt:String
-    updatedAt:String
-  }
 
   type Query {
     findAllPost:[Post]
@@ -57,13 +58,12 @@ const typeDefs = `#graphql
     content:String
     tags:[String]
     imgUrl:String
-    authorId:ID
-    comments:[CommentInput]
-    likes: [LikeInput]
+    # disiini gaperlu diisi authorId
+    # karena user gaperlu isi id nya
+    # langsung diisi auto dari authentiation
   }
 
+
 `;
-
-
 
 module.exports = typeDefs;
