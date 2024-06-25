@@ -7,7 +7,7 @@ const { ApolloServer } = require("@apollo/server");
 const { startStandaloneServer } = require("@apollo/server/standalone");
 const userTypeDefs = require("./schema/userSchema");
 const postTypeDefs = require("./schema/postSchema");
-const followTypeDefs = require ("./schema/followSchema")
+const followTypeDefs = require("./schema/followSchema");
 const userResolver = require("./resolver/userResolver");
 const postResolver = require("./resolver/postResolver");
 const followResolver = require("./resolver/followResolver");
@@ -15,11 +15,15 @@ const followResolver = require("./resolver/followResolver");
 const { GraphQLError } = require("graphql");
 const { verifyToken } = require("./helpers/jwt");
 
+
+
 const server = new ApolloServer({
-  typeDefs: [userTypeDefs, postTypeDefs,followTypeDefs],
-  resolvers: [userResolver, postResolver,followResolver],
+  typeDefs: [userTypeDefs, postTypeDefs, followTypeDefs],
+  resolvers: [userResolver, postResolver, followResolver],
   introspection: true,
 });
+
+
 
 // Passing an ApolloServer instance to the `startStandaloneServer` function:
 //  1. creates an Express app
@@ -27,7 +31,7 @@ const server = new ApolloServer({
 //  3. prepares your app to handle incoming requests
 
 startStandaloneServer(server, {
-  listen: { port: 4000 },
+  listen: { port: process.env.PORT || 4000 },
   context: async ({ req }) => {
     return {
       authentication: () => {
