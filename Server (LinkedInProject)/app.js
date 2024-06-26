@@ -1,8 +1,8 @@
 // import { ApolloServer } from "@apollo/server";
 // import { startStandaloneServer } from "@apollo/server/standalone";
-if (process.env.NODE_ENV !== "production") {
-  require("dotenv").config();
-}
+
+require("dotenv").config()
+
 const { ApolloServer } = require("@apollo/server");
 const { startStandaloneServer } = require("@apollo/server/standalone");
 const userTypeDefs = require("./schema/userSchema");
@@ -14,8 +14,6 @@ const followResolver = require("./resolver/followResolver");
 
 const { GraphQLError } = require("graphql");
 const { verifyToken } = require("./helpers/jwt");
-
-
 
 const server = new ApolloServer({
   typeDefs: [userTypeDefs, postTypeDefs, followTypeDefs],
@@ -33,6 +31,7 @@ const server = new ApolloServer({
 startStandaloneServer(server, {
   listen: { port: process.env.PORT || 4000 },
   context: async ({ req }) => {
+
     return {
       authentication: () => {
         const authHeader = req.headers.authorization || "";
