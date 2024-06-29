@@ -1,7 +1,7 @@
 // import { ApolloServer } from "@apollo/server";
 // import { startStandaloneServer } from "@apollo/server/standalone";
 
-require("dotenv").config()
+require("dotenv").config();
 
 const { ApolloServer } = require("@apollo/server");
 const { startStandaloneServer } = require("@apollo/server/standalone");
@@ -21,8 +21,6 @@ const server = new ApolloServer({
   introspection: true,
 });
 
-
-
 // Passing an ApolloServer instance to the `startStandaloneServer` function:
 //  1. creates an Express app
 //  2. installs your ApolloServer instance as middleware
@@ -31,7 +29,6 @@ const server = new ApolloServer({
 startStandaloneServer(server, {
   listen: { port: process.env.PORT || 4000 },
   context: async ({ req }) => {
-
     return {
       authentication: () => {
         const authHeader = req.headers.authorization || "";
