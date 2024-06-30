@@ -17,7 +17,8 @@ const typeDefs = `#graphql
     name:String
     username:String
     email:String
-  }
+    profilePicture:String
+      }
 
   type Comments{
     content:String
