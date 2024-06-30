@@ -3,7 +3,7 @@ const { signToken } = require("../helpers/jwt");
 const Users = require("../models/UserModel");
 
 const getDicebearAvatarUrl = (identifier) => {
-  return `https://api.multiavatar.com/${encodeURIComponent(identifier)}.svg`;
+  return `https://api.multiavatar.com/${encodeURIComponent(identifier)}.png`;
 };
 
 const resolvers = {
