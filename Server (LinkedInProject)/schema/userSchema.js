@@ -5,6 +5,7 @@ const typeDefs = `#graphql
     username:String
     email:String
     password:String
+    profilePicture:String
   }
 
   type Query {

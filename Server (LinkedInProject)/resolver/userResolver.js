@@ -2,6 +2,10 @@ const { hashPassword, comparePassword } = require("../helpers/bcrypt");
 const { signToken } = require("../helpers/jwt");
 const Users = require("../models/UserModel");
 
+const getDicebearAvatarUrl = (identifier) => {
+  return `https://api.multiavatar.com/${encodeURIComponent(identifier)}.svg`;
+};
+
 const resolvers = {
   Mutation: {
     register: async (parent, args) => {
@@ -27,8 +31,9 @@ const resolvers = {
       }
 
       const hashedPassword = hashPassword(password);
+      const profilePicture = getDicebearAvatarUrl(email);
 
-      const registerUser = { username, email, password: hashedPassword, name };
+      const registerUser = { username, email, password: hashedPassword, name, profilePicture };
       const result = await Users.registerUser(registerUser);
       const { password: _, ...userNoPass } = registerUser;
       return { ...userNoPass, _id: result.insertedId };
@@ -56,7 +61,7 @@ const resolvers = {
 
         const { password: _, ...userNoPass } = user;
 
-        return { token, email};
+        return { token, email };
       } catch (error) {
         console.log(error);
       }
