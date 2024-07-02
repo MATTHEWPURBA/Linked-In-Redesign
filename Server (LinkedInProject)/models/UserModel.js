@@ -45,7 +45,6 @@ class Users {
       if (!user.length) {
         throw new Error("User Not Found");
       }
-      console.log(user,"ni user");
 
       return user[0]; //tes dengan console log
     } catch (error) {
