@@ -9,7 +9,7 @@ class Post {
     try {
       const response = await this.collection().insertOne({
         ...newPost,
-        // perbedaan newPost yang di 
+        // perbedaan newPost yang di
         // return dengan .insertOne(newPost)
         // dengan .insertOne({...newPost})
         // adalah kalo newPost yang invoke

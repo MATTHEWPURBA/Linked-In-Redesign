@@ -3,7 +3,7 @@ const typeDefs = `#graphql
     _id: ID
     content:String
     tags:[String]
-    imgUrl:String
+    imgUrl:String 
     authorId:String
     comments:[Comments]
     likes: [Likes]

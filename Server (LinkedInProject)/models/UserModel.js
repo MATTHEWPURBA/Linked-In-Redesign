@@ -19,11 +19,35 @@ class Users {
   }
   static async findUserById(id) {
     try {
-      const user = await this.collection().findOne({ _id: new ObjectId(id) });
-      if (!user) {
-        throw new Error("user Not Found");
+      const user = await this.collection()
+        .aggregate([
+          {
+            $match: { _id: new ObjectId(id) },
+          },
+          {
+            $lookup: {
+              from: "Posts",
+              localField: "_id",
+              foreignField: "authorId", //ini ambil authorId di Post supaya nentuin
+              //post milik orang yang udah login
+              as: "posts",
+            },
+          },
+        ])
+        .toArray();
+
+      // findOne({ _id: new ObjectId(id) });
+
+      // if (!user) {
+      //   throw new Error("user Not Found");
+      // }
+
+      if (!user.length) {
+        throw new Error("User Not Found");
       }
-      return user;
+      console.log(user,"ni user");
+
+      return user[0]; //tes dengan console log
     } catch (error) {
       console.log(error);
       throw new Error("Error Fetching user by id");

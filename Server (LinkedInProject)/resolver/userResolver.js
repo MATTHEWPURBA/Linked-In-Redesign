@@ -51,19 +51,20 @@ const resolvers = {
           throw new Error("User Not Found");
         }
 
-        const isPasswordValid = comparePassword(password, user.password);
+        const isPasswordValid = await comparePassword(password, user.password);
 
         if (!isPasswordValid) {
-          throw new Error("invalid password");
+          throw new Error("Invalid password");
         }
 
         const token = signToken({ _id: user._id, email: user.email });
 
         const { password: _, ...userNoPass } = user;
 
-        return { token, email };
+        return { token, ...userNoPass };
       } catch (error) {
-        console.log(error);
+        console.error("Login error:", error.message);
+        throw error; // Rethrow the error to propagate it to the client
       }
     },
   },

@@ -6,6 +6,8 @@ const typeDefs = `#graphql
     email:String
     password:String
     profilePicture:String
+    posts:[Post!]
+    # Post ini terhubung ke graphQL post di file lain jadi gaperlu di definisikan ulang
   }
 
   type Query {

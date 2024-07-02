@@ -1,14 +1,12 @@
 const jwt = require("jsonwebtoken");
-
-const secret = process.env.JWT_SECRET;
-
 require("dotenv").config();
 
-function signToken(payload) {
-  return jwt.sign(payload, secret, {
-    expiresIn: "1h" /** ini fitur dari jwt */,
-  });
-}
+const secretKey = process.env.JWT_SECRET;
+
+
+const signToken = (payload) => {
+  return jwt.sign(payload, secretKey, { expiresIn: "1h" }); // Example expiry time
+};
 
 function verifyToken(token) {
   try {
