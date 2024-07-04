@@ -38,40 +38,55 @@ const server = new ApolloServer({
   introspection: true,
 });
 
-startStandaloneServer(server, Users.createIndexes(), {
-  listen: { port: process.env.PORT || 4000 },
-  context: async ({ req }) => {
-    return {
-      authentication: () => {
-        const authHeader = req.headers.authorization || "";
-        // const token = authHeader.split(" ")[1];
-        const [type, token] = authHeader.split(" ");
-        const secret = process.env.JWT_SECRET;
+const port = process.env.PORT || 4000;
 
-        if (!token) {
-          throw new GraphQLError("Access Token Must Be Provided", {
-            extensions: { code: "NOT_AUTHORIZED" },
-          });
-        }
+Users.createIndexes()
 
-        if (type !== "Bearer") {
-          throw new GraphQLError("Unauthorized");
-        }
+  .then(() => {
+    return startStandaloneServer(server, {
+      listen: { port },
+      context: async ({ req }) => {
+        return {
+          authentication: () => {
+            const authHeader = req.headers.authorization || "";
+            // const token = authHeader.split(" ")[1];
+            const [type, token] = authHeader.split(" ");
+            const secret = process.env.JWT_SECRET;
 
-        const decodeToken = verifyToken(token, secret);
+            if (!token) {
+              throw new GraphQLError("Access Token Must Be Provided", {
+                extensions: { code: "NOT_AUTHORIZED" },
+              });
+            }
 
-        if (!decodeToken) {
-          throw new GraphQLError("Access Must Be Valid", {
-            extensions: { code: "NOT_AUTHORIZED" },
-          });
-        }
+            if (type !== "Bearer") {
+              throw new GraphQLError("Unauthorized");
+            }
 
-        return decodeToken;
+            const decodeToken = verifyToken(token, secret);
+
+            if (!decodeToken) {
+              throw new GraphQLError("Access Must Be Valid", {
+                extensions: { code: "NOT_AUTHORIZED" },
+              });
+            }
+
+            return decodeToken;
+          },
+        };
       },
-    };
-  },
-})
+    });
+  })
   .then(({ url }) => {
     console.log(`🚀 Server ready at: ${url}`);
   })
-  .catch((error) => console.log(error));
+  .catch((error) => {
+    if (error.code === "EACCES" && port === 80) {
+      console.error("Port 80 requires elevated privileges");
+    } else if (error.code === "EADDRINUSE") {
+      console.error(`Port ${port} is already in use`);
+    } else {
+      console.error("Error starting server:", error);
+    }
+    process.exit(1);
+  });
