@@ -22,8 +22,6 @@ export default function UserProfile({ route, navigation }) {
 
   //   console.log(data, "ini ini data");
 
-  console.log(navigation, "ini navigation");
-
   return (
     <View style={{ flex: 1, padding: 16 }}>
       <View style={{ alignItems: "center", marginBottom: 16 }}>
