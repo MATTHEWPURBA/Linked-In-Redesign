@@ -15,13 +15,11 @@ const uploadRouter = require("./route/uploadImage"); // Import the upload route
 const express = require("express");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
-const csrf = require('csurf');
-
 
 const app = express();
 
 const corsOptions = {
-  origin: "http://localhost:4000/", // Update this to your client domain
+  origin: "http://localhost:4000/upload", // Update this to your client domain
   methods: "GET,POST",
   allowedHeaders: "Content-Type,Authorization",
   credentials: true,
@@ -29,16 +27,11 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 app.use(cookieParser());
-app.use(csrf({ cookie: true }));
-
 
 // Add the upload route to your Express app
 app.use("/upload", uploadRouter);
-// CSRF Token Endpoint
-app.get('/csrf-token', (req, res) => {
-  res.json({ csrfToken: req.csrfToken() });
-});
 
+console.log(process.env.JWT_SECRET);
 
 const server = new ApolloServer({
   typeDefs: [userTypeDefs, postTypeDefs, followTypeDefs],
@@ -52,7 +45,8 @@ startStandaloneServer(server, {
     return {
       authentication: () => {
         const authHeader = req.headers.authorization || "";
-        const token = authHeader.split(" ")[1];
+        // const token = authHeader.split(" ")[1];
+        const [type, token] = authHeader.split(" ");
         const secret = process.env.JWT_SECRET;
 
         if (!token) {
@@ -61,7 +55,12 @@ startStandaloneServer(server, {
           });
         }
 
+        if (type !== "Bearer") {
+          throw new GraphQLError("Unauthorized");
+        }
+
         const decodeToken = verifyToken(token, secret);
+
         if (!decodeToken) {
           throw new GraphQLError("Access Must Be Valid", {
             extensions: { code: "NOT_AUTHORIZED" },
