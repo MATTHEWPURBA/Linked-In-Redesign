@@ -31,8 +31,6 @@ app.use(cookieParser());
 // Add the upload route to your Express app
 app.use("/upload", uploadRouter);
 
-console.log(process.env.JWT_SECRET);
-
 const server = new ApolloServer({
   typeDefs: [userTypeDefs, postTypeDefs, followTypeDefs],
   resolvers: [userResolver, postResolver, followResolver],
