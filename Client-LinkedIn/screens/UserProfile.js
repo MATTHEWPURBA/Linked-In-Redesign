@@ -1,6 +1,6 @@
 import { ActivityIndicator, FlatList, Text, TouchableOpacity, View } from "react-native";
 import { GET_USER_PROFILE } from "../queries/getUserProfile";
-import PostCard from "./PostCard";
+import PostCard from "../component/PostCard";
 import { useQuery } from "@apollo/client";
 
 export default function UserProfile({ route, navigation }) {
