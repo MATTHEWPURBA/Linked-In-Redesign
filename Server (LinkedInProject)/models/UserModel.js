@@ -6,6 +6,16 @@ class Users {
     return database.collection("Users");
   }
 
+  static async createIndexes() {
+    //logic check mongoDB for duplicate Username
+    try {
+      this.collection().createIndex({ username: 1 }, { unique: true });
+      this.collection().createIndex({ email: 1 }, { unique: true });
+    } catch (error) {
+      console.log(`Error creating index: ${error}`);
+    }
+  }
+
   static async registerUser(newUser) {
     try {
       const result = await this.collection().insertOne(newUser);
@@ -56,7 +66,15 @@ class Users {
     try {
       return this.collection().findOne({ email });
     } catch (error) {
-      throw new Error("User Email cant");
+      throw new Error("User Email already exist");
+    }
+  }
+
+  static async findUserByUsername(username) {
+    try {
+      return this.collection().findOne({ username });
+    } catch (error) {
+      throw new Error("Username already exist");
     }
   }
 }

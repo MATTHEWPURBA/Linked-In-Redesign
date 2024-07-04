@@ -15,6 +15,7 @@ const uploadRouter = require("./route/uploadImage"); // Import the upload route
 const express = require("express");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
+const Users = require("./models/UserModel");
 
 const app = express();
 
@@ -37,7 +38,7 @@ const server = new ApolloServer({
   introspection: true,
 });
 
-startStandaloneServer(server, {
+startStandaloneServer(server, Users.createIndexes(), {
   listen: { port: process.env.PORT || 4000 },
   context: async ({ req }) => {
     return {

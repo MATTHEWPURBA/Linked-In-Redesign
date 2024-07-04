@@ -25,9 +25,10 @@ const resolvers = {
         throw new Error("Invalid Email Format");
       }
 
-      const existedUser = await Users.findUserByEmail(email);
-      if (existedUser) {
-        throw new Error("Email already exist");
+      const existedEmail = await Users.findUserByEmail(email);
+      const existedUsername = await Users.findUserByUsername(username);
+      if (existedEmail || existedUsername) {
+        throw new Error("Email/Username already exist");
       }
 
       const hashedPassword = hashPassword(password);
