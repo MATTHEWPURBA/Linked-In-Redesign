@@ -69,14 +69,8 @@ const resolvers = {
     },
     findPostById: async (parent, args) => {
       const { id } = args;
-      const books = await redis.get("postById");
-      if (books) {
-        return JSON.parse(books);
-      }
       try {
         const post = await Post.findPostById(id);
-        console.log(post);
-        await redis.set("postById", JSON.stringify(post));
         return post;
       } catch (error) {
         console.log(error, "ini error");
