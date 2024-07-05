@@ -4,7 +4,7 @@ const typeDefs = `#graphql
     content:String
     tags:[String]
     imgUrl:String 
-    authorId:String
+    authorId:ID
     comments:[Comments]
     likes: [Likes]
     createdAt:String
@@ -59,6 +59,7 @@ const typeDefs = `#graphql
     content:String
     tags:[String]
     imgUrl:String
+    authorId: ID
     # disiini gaperlu diisi authorId
     # karena user gaperlu isi id nya
     # langsung diisi auto dari authentiation
