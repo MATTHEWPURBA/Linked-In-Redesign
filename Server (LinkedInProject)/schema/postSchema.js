@@ -36,7 +36,7 @@ const typeDefs = `#graphql
 
   type Query {
     findAllPost:[Post]
-    findPostById(id:ID):Post
+    findPostById(id:ID!):Post
   }
 
 

@@ -22,6 +22,7 @@ const resolvers = {
         const response = await Post.addPost(newPost);
         newPost._id = response.insertedId; // You mentioned this line is unnecessary due to the schema
         await redis.del("posts");
+        await redis.del("postById");
         return newPost;
       } catch (error) {
         console.log(error);
@@ -68,8 +69,18 @@ const resolvers = {
     },
     findPostById: async (parent, args) => {
       const { id } = args;
-      const post = await Post.findPostById(id);
-      return post;
+      const books = await redis.get("postById");
+      if (books) {
+        return JSON.parse(books);
+      }
+      try {
+        const post = await Post.findPostById(id);
+        console.log(post);
+        await redis.set("postById", JSON.stringify(post));
+        return post;
+      } catch (error) {
+        console.log(error, "ini error");
+      }
     },
   },
 };

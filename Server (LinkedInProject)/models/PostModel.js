@@ -31,11 +31,36 @@ class Post {
 
   static async findPostById(id) {
     try {
-      const post = await this.collection().findOne({ _id: new ObjectId(id) });
-      if (!post) {
+      const post = await this.collection()
+        .aggregate([
+          { $match: { _id: new ObjectId(id) } },
+          {
+            $lookup: {
+              from: "Users",
+              localField: "authorId",
+              foreignField: "_id",
+              as: "author",
+            },
+          },
+          {
+            $unwind: {
+              path: "$author",
+              preserveNullAndEmptyArrays: false,
+            },
+          },
+          {
+            $project: {
+              "author.password": 0,
+            },
+          },
+        ])
+        .toArray();
+
+      console.log(post, "ini post");
+      if (!post.length) {
         throw new Error("Post not found");
       }
-      return post;
+      return post[0];
     } catch (error) {
       console.log(error);
       throw new Error("Error Fetch Post By Id");
