@@ -10,6 +10,7 @@ import AuthContext from "../context/auth";
 const MUTATION_LOGIN = gql`
   mutation Mutation($email: String!, $password: String!) {
     login(email: $email, password: $password) {
+      # semua variabel yang brhubungan sam GraphQL
       token
       email
     }

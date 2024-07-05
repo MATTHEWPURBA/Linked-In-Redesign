@@ -12,7 +12,7 @@ const authLink = setContext(async (_, { headers }) => {
   // return the headers to the context so httpLink can read them
   return {
     headers: {
-      // nah jadi headers ini  dibuat dari authLink
+      // nah j adi headers ini  dibuat dari authLink
       // headers ini yang berfungsi untuk oper hasil
       // dari decrypt accessToken
       ...headers,

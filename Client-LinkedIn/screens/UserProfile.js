@@ -14,14 +14,6 @@ export default function UserProfile({ route, navigation }) {
 
   const user = data.findUserById;
 
-  //   console.log(user, "ini user");
-  //   console.log(user.name, "ini user name");
-  //   console.log(user.username, "ini user username");
-  //   console.log(user.email, "ini user email");
-  //   console.log(user.posts, "ini user email");
-
-  //   console.log(data, "ini ini data");
-
   return (
     <View style={{ flex: 1, padding: 16 }}>
       <View style={{ alignItems: "center", marginBottom: 16 }}>
@@ -30,7 +22,7 @@ export default function UserProfile({ route, navigation }) {
         <Text>@{user.username}</Text>
       </View>
 
-      <FlatList data={user.posts} keyExtractor={(item) => item._id} renderItem={({ item }) => <PostCard content={item.content} imgUrl={item.imgUrl} author={item.author} />} />
+      <FlatList data={user.posts.filter((post) => post.imgUrl)} keyExtractor={(item) => item._id} renderItem={({ item }) => <PostCard content={item.content} imgUrl={item.imgUrl} author={item.author} />} />
 
       <TouchableOpacity style={{ marginTop: 20, backgroundColor: "blue", padding: 10, borderRadius: 5 }} onPress={() => navigation.navigate("HomeStack")}>
         <Text style={{ color: "white", textAlign: "center" }}>Back to Home</Text>

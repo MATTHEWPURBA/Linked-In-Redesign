@@ -7,12 +7,16 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import LoginScreen from "../screens/LoginScreen";
 import * as SecureStore from "expo-secure-store";
 import AuthContext from "../context/auth";
+import AddPostScreen from "../screens/AddPostScreen";
+import { jwtDecode } from "jwt-decode";
+import DetailsScreen from "../screens/DetailScreen";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
 function HomeStack() {
   const [isSignedIn, setSignedIn] = useState(false);
+  const [userId, setUserId] = useState(null);
 
   useEffect(() => {
     SecureStore.getItemAsync("accessToken")
@@ -22,6 +26,14 @@ function HomeStack() {
       .then((result) => {
         if (result) {
           setSignedIn(true);
+          // Decode the token to get userId and set it
+          // Assuming you have a function decodeToken to decode the JWT and get userId
+          const decodeToken = jwtDecode(result);
+          const userId = decodeToken._id;
+          setUserId(userId);
+          //setUserId tuh untuk set UserId
+          //saat user berhasil Login
+          console.log(userId, "ini user id");
         }
       })
       .catch((err) => {
@@ -34,6 +46,8 @@ function HomeStack() {
       value={{
         isSignedIn,
         setSignedIn,
+        userId,
+        setUserId,
       }}
       //nah disini bisa diatur nih untuk auth nya apakah
       // true or false si isSignedIn nya
@@ -55,6 +69,7 @@ function HomeStack() {
         ) : (
           <>
             <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: true }} />
+            <Stack.Screen name="PostDetail" component={DetailsScreen} />
           </>
         )}
       </Stack.Navigator>
@@ -74,6 +89,15 @@ export default function TabNavigator() {
           title: "Home",
         }}
       />
+      <Tab.Screen
+        name="AddPost"
+        component={AddPostScreen}
+        options={{
+          tabBarIcon: ({ focused, color, size }) => <AntDesign name="pluscircleo" color={focused ? "blue" : "grey"} size={size} />,
+          title: "Add Post",
+        }}
+      />
+
       <Tab.Screen
         name="Profile"
         component={UserProfile}

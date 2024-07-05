@@ -20,7 +20,7 @@ export default function HomeScreen({ navigation }) {
 
   useEffect(() => {
     navigation.setOptions({
-      headerRight: () => <LogoutButton/>,
+      headerRight: () => <LogoutButton />,
     });
   }, [navigation]);
 
@@ -28,11 +28,7 @@ export default function HomeScreen({ navigation }) {
   if (error) return <Text>Error: {error.message}</Text>;
 
   // Filter the posts to remove any without author.name or author.username
-  const validPosts = data.findAllPost.filter((post) => post.author && post.author.name && post.author.username);
-
-  const handleLogout = async () => {
-    setSignedIn(false);
-  };
+  const validPosts = data.findAllPost.filter((post) => post.author && post.author.name && post.author.username).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
   return (
     <View style={styles.container}>
@@ -40,7 +36,7 @@ export default function HomeScreen({ navigation }) {
         data={validPosts}
         keyExtractor={(item) => item._id}
         renderItem={({ item }) => (
-          <TouchableOpacity onPress={() => navigation.navigate("Profile", { userId: item.author._id })}>
+          <TouchableOpacity onPress={() => navigation.navigate("PostDetail", { postId: item._id })}>
             <JobItem content={item.content} imgUrl={item.imgUrl} author={item.author} />
           </TouchableOpacity>
         )}
