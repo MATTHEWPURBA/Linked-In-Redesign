@@ -21,7 +21,7 @@ export default function DetailsScreen({ route }) {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>{post.content}</Text>
-      {post.imgUrl && <Image source={{ uri: post.imgUrl }} style={styles.image} />}
+      {post.imgUrl && <Image source={{ uri: post.imgUrl }} style={styles.image} resizeMode="contain" />}
       <Text style={styles.author}>By: {post.author.name}</Text>
       <Text style={styles.date}>Posted on: {new Date(post.createdAt).toLocaleDateString()}</Text>
       <Text style={styles.sectionTitle}>Comments:</Text>
@@ -52,7 +52,8 @@ const styles = StyleSheet.create({
   },
   image: {
     width: "100%",
-    height: 400,
+    height: undefined,
+    aspectRatio: 1, // Adjust this value to match the aspect ratio of your images
     marginBottom: 10,
   },
   author: {

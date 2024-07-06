@@ -34,6 +34,32 @@ export default function AddPostScreen({ navigation }) {
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       quality: 1,
     });
+
+    console.log(result,"ini result")
+
+    if (!result.canceled) {
+      const localUri = result.assets[0].uri;
+      const fileType = localUri.split('.').pop();
+
+      const uploadData = new FormData();
+      uploadData.append('file', {
+        uri: localUri,
+        type: `image/${fileType}`,
+        name: `upload.${fileType}`
+      });
+      uploadData.append('upload_preset', 'Mobile_LinkedIn'); // Replace 'your_upload_preset' with your Cloudinary upload preset.
+
+      const response = await fetch("https://api.cloudinary.com/v1_1/dg3xgdrc1/image/upload", { // Replace 'your_cloud_name' with your Cloudinary cloud name.
+        method: 'POST',
+        body: uploadData
+      });
+
+
+      const data = await response.json();
+      setImgUrl(data.secure_url);
+    }
+
+
   };
 
   const handleSubmit = () => {
