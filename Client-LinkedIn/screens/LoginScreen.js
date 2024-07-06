@@ -1,6 +1,6 @@
 // screens/LoginScreen.js
 import React, { useContext, useState } from "react";
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, ActivityIndicator } from "react-native";
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, ActivityIndicator, TouchableWithoutFeedback, Keyboard } from "react-native";
 import { useMutation } from "@apollo/client";
 // import { LOGIN_USER } from "../queries/loginUser";
 import { gql } from "@apollo/client";
@@ -20,8 +20,8 @@ const MUTATION_LOGIN = gql`
 
 export default function LoginScreen({ navigation }) {
   const auth = useContext(AuthContext);
-  const [email, setEmail] = useState("kereen@gmail.com");
-  const [password, setPassword] = useState("pantat");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
   const [loginUser, { loading, error, data }] = useMutation(MUTATION_LOGIN, {
@@ -36,6 +36,7 @@ export default function LoginScreen({ navigation }) {
         // kegiatan simpan token
         auth.setSignedIn(true); // operan dari tabNavigator bisa di manipulasi disini
         auth.setUserId(decodedToken._id);
+        resetForm()
       }
     },
   });
@@ -48,24 +49,31 @@ export default function LoginScreen({ navigation }) {
     setIsPasswordVisible(!isPasswordVisible);
   };
 
+  const resetForm = () => {
+    setEmail("");
+    setPassword("");
+  };
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>
-        Linked<Text style={styles.titleHighlight}>In</Text>
-      </Text>
-      <TextInput style={styles.input} placeholder="Email" value={email} onChangeText={setEmail} placeholderTextColor="#bbb" />
-      <View style={styles.passwordContainer}>
-        <TextInput style={styles.passwordInput} placeholder="Password" secureTextEntry={!isPasswordVisible} value={password} onChangeText={setPassword} placeholderTextColor="#bbb" />
-        <TouchableOpacity style={styles.visibilityButton} onPress={togglePasswordVisibility}>
-          <Text style={styles.visibilityButtonText}>{isPasswordVisible ? "Hide" : "Show"}</Text>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <View style={styles.container}>
+        <Text style={styles.title}>
+          Linked<Text style={styles.titleHighlight}>In</Text>
+        </Text>
+        <TextInput style={styles.input} placeholder="Email" value={email} onChangeText={setEmail} placeholderTextColor="#bbb" />
+        <View style={styles.passwordContainer}>
+          <TextInput style={styles.passwordInput} placeholder="Password" secureTextEntry={!isPasswordVisible} value={password} onChangeText={setPassword} placeholderTextColor="#bbb" />
+          <TouchableOpacity style={styles.visibilityButton} onPress={togglePasswordVisibility}>
+            <Text style={styles.visibilityButtonText}>{isPasswordVisible ? "Hide" : "Show"}</Text>
+          </TouchableOpacity>
+        </View>
+        <TouchableOpacity style={styles.button} onPress={handleLogin}>
+          <Text style={styles.buttonText}>Login</Text>
         </TouchableOpacity>
-      </View>
-      <TouchableOpacity style={styles.button} onPress={handleLogin}>
-        <Text style={styles.buttonText}>Login</Text>
-      </TouchableOpacity>
-      {/* {loading && <ActivityIndicator size="large" color="#0000ff" />}
+        {/* {loading && <ActivityIndicator size="large" color="#0000ff" />}
       {error && <Text style={styles.error}>Error: {error.message}</Text>} */}
-    </View>
+      </View>
+    </TouchableWithoutFeedback>
   );
 }
 

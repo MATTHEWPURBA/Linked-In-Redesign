@@ -9,6 +9,7 @@ import UserProfile from "../screens/UserProfile";
 import DetailsScreen from "../screens/DetailScreen";
 import LoginScreen from "../screens/LoginScreen";
 import AuthContext from "../context/auth";
+import RegisterScreen from "../screens/RegisterScreen";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -29,7 +30,10 @@ function HomeStack() {
       }}
     >
       {!isSignedIn ? (
-        <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
+        <>
+          <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
+          <Stack.Screen name="Register" component={RegisterScreen} options={{ headerShown: false }} /> {/* Add Register Screen */}
+        </>
       ) : (
         <>
           <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: true, title: "Home" }} />
@@ -78,15 +82,26 @@ export default function TabNavigator() {
           />
         </>
       ) : (
-        <Tab.Screen
-          name="Login"
-          component={LoginScreen}
-          options={{
-            tabBarIcon: ({ focused, color, size }) => <AntDesign name="login" color={focused ? "dodgerblue" : "grey"} size={size} />,
-            headerShown: false,
-            title: "Login",
-          }}
-        />
+        <>
+          <Tab.Screen
+            name="Login"
+            component={LoginScreen}
+            options={{
+              tabBarIcon: ({ focused, color, size }) => <AntDesign name="login" color={focused ? "dodgerblue" : "grey"} size={size} />,
+              headerShown: false,
+              title: "Login",
+            }}
+          />
+          <Tab.Screen
+            name="Register"
+            component={RegisterScreen}
+            options={{
+              tabBarIcon: ({ focused, color, size }) => <AntDesign name="login" color={focused ? "dodgerblue" : "grey"} size={size} />,
+              headerShown: false,
+              title: "Register",
+            }}
+          />
+        </>
       )}
     </Tab.Navigator>
   );

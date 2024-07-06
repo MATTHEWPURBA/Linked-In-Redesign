@@ -35,7 +35,6 @@ export default function AddPostScreen({ navigation }) {
       quality: 1,
     });
   };
-  console.log(userId, "ini user id bawah");
 
   const handleSubmit = () => {
     addPost({
@@ -49,7 +48,6 @@ export default function AddPostScreen({ navigation }) {
     });
   };
 
-  console.log(userId, "ini user Id");
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
