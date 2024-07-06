@@ -55,8 +55,6 @@ class Post {
           },
         ])
         .toArray();
-
-      console.log(post, "ini post");
       if (!post.length) {
         throw new Error("Post not found");
       }

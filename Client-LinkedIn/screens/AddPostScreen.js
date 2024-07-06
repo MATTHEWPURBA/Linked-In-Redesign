@@ -34,11 +34,8 @@ export default function AddPostScreen({ navigation }) {
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       quality: 1,
     });
-
-    if (!result.cancelled) {
-      setImgUrl(result.assets[0].uri);
-    }
   };
+  console.log(userId, "ini user id bawah");
 
   const handleSubmit = () => {
     addPost({

@@ -1,10 +1,12 @@
-import { ActivityIndicator, FlatList, Text, TouchableOpacity, View } from "react-native";
-import { GET_USER_PROFILE } from "../queries/getUserProfile";
-import PostCard from "../component/PostCard";
+import React, { useContext } from "react";
 import { useQuery } from "@apollo/client";
+import { View, Text, Image, StyleSheet, ActivityIndicator, ScrollView, TouchableOpacity } from "react-native";
+import { GET_USER_PROFILE } from "../queries/getUserProfile";
+import AuthContext from "../context/auth";
 
-export default function UserProfile({ route, navigation }) {
-  const { userId } = route.params;
+export default function UserProfile({ navigation }) {
+  const { userId } = useContext(AuthContext);
+
   const { loading, error, data } = useQuery(GET_USER_PROFILE, {
     variables: { findUserByIdId: userId },
   });
@@ -15,18 +17,64 @@ export default function UserProfile({ route, navigation }) {
   const user = data.findUserById;
 
   return (
-    <View style={{ flex: 1, padding: 16 }}>
-      <View style={{ alignItems: "center", marginBottom: 16 }}>
-        {/* <Image source={{ uri: user.profilePicture }} style={{ width: 100, height: 100, borderRadius: 50 }} /> */}
-        <Text>@{user.name}</Text>
-        <Text>@{user.username}</Text>
-      </View>
-
-      <FlatList data={user.posts.filter((post) => post.imgUrl)} keyExtractor={(item) => item._id} renderItem={({ item }) => <PostCard content={item.content} imgUrl={item.imgUrl} author={item.author} />} />
-
-      <TouchableOpacity style={{ marginTop: 20, backgroundColor: "blue", padding: 10, borderRadius: 5 }} onPress={() => navigation.navigate("HomeStack")}>
-        <Text style={{ color: "white", textAlign: "center" }}>Back to Home</Text>
-      </TouchableOpacity>
-    </View>
+    <ScrollView contentContainerStyle={styles.container}>
+      <Image source={{ uri: user.profilePicture }} style={styles.profilePicture} />
+      <Text style={styles.name}>{user.name}</Text>
+      <Text style={styles.username}>@{user.username}</Text>
+      <Text style={styles.email}>{user.email}</Text>
+      <Text style={styles.bio}>Bio goes here...</Text>
+      {user.posts.map((post) => (
+        <TouchableOpacity key={post._id} style={styles.post} onPress={() => navigation.navigate("PostDetail", { postId: post._id })}>
+          <Text>{post.content}</Text>
+          {post.imgUrl && <Image source={{ uri: post.imgUrl }} style={styles.postImage} />}
+        </TouchableOpacity>
+      ))}
+    </ScrollView>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flexGrow: 1,
+    alignItems: "center",
+    padding: 20,
+  },
+  profilePicture: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    marginBottom: 20,
+    marginTop: 60,
+  },
+  name: {
+    fontSize: 24,
+    fontWeight: "bold",
+  },
+  username: {
+    fontSize: 18,
+    color: "gray",
+  },
+  email: {
+    fontSize: 18,
+    color: "gray",
+  },
+  bio: {
+    fontSize: 16,
+    textAlign: "center",
+    marginTop: 20,
+  },
+  post: {
+    marginTop: 20,
+    padding: 10,
+    borderWidth: 1,
+    borderColor: "gray",
+    borderRadius: 5,
+    width: "100%",
+  },
+  postImage: {
+    width: "100%",
+    height: 200,
+    borderRadius: 5,
+    marginTop: 10,
+  },
+});

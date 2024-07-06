@@ -6,6 +6,7 @@ import { useMutation } from "@apollo/client";
 import { gql } from "@apollo/client";
 import * as SecureStore from "expo-secure-store";
 import AuthContext from "../context/auth";
+import { jwtDecode } from "jwt-decode";
 
 const MUTATION_LOGIN = gql`
   mutation Mutation($email: String!, $password: String!) {
@@ -31,13 +32,13 @@ export default function LoginScreen({ navigation }) {
       // navigation.navigate("Home");
       if (mutationResult?.login?.token) {
         await SecureStore.setItemAsync("accessToken", mutationResult?.login?.token);
+        const decodedToken = jwtDecode(mutationResult.login.token);
         // kegiatan simpan token
         auth.setSignedIn(true); // operan dari tabNavigator bisa di manipulasi disini
+        auth.setUserId(decodedToken._id);
       }
     },
   });
-
-  //   console.log(loading, error, data, "ini nih");
 
   const handleLogin = () => {
     loginUser({ variables: { email, password } });

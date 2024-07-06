@@ -8,7 +8,6 @@ export default function LogoutButton() {
 
   const handleLogout = async () => {
     const response = await SecureStore.deleteItemAsync("accessToken");
-    console.log(response, "ini response");
     auth.setSignedIn(false);
   };
 
